@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import sklearn
+import numpy
 
 # Load model and feature list
 model = joblib.load("CustomerChurnPrediction.pkl")
