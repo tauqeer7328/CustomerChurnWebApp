@@ -63,15 +63,16 @@ if st.button("Predict"):
         'MaritalStatus':[MaritalStatus]
     })
 
-    # Apply same encoding
-    encoded = pd.get_dummies(raw_data, drop_first=True)
+    # Apply one-hot encoding without drop_first to match training data encoding
+    encoded = pd.get_dummies(raw_data, drop_first=False)
 
-    # Match training columns exactly
+    # Align features with training columns; missing columns are filled with 0
     encoded = encoded.reindex(columns=feature_columns, fill_value=0)
 
     prediction = model.predict(encoded)
+    prediction_proba = model.predict_proba(encoded)
 
     if prediction[0] == 1:
-        st.error("Customer will Churn ❌")
+        st.error(f"Customer will Churn ❌ (Confidence: {prediction_proba[0][1]:.2%})")
     else:
-        st.success("Customer will Stay ✅")
+        st.success(f"Customer will Stay ✅ (Confidence: {prediction_proba[0][0]:.2%})")
